@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h3>{{ titre }}</h3>
+        <form method="POST" class="mt-4 border p-4 rounded bg-light">
+            {{ form.hidden_tag() }}
+            {% for field in form if field.name != 'csrf_token' and field.name != 'submit' %}
+                <div class="mb-3">
+                    {{ field.label(class="form-label fw-bold") }}
+                    {{ field(class="form-control") }}
+                </div>
+            {% endfor %}
+            {{ form.submit(class="btn btn-success w-100") }}
+            <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-link w-100 mt-2">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

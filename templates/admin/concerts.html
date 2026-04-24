@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Concerts</h2>
+    <a href="{{ url_for('main.ajouter_concert') }}" class="btn btn-info text-white">Ajouter un concert</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Nom</th>
+                <th>Lieu</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in concerts %}
+            <tr>
+                <td>{{ c.date_concert.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>{{ c.nom }}</td>
+                <td>{{ c.lieu }}</td>
+                <td><span class="badge bg-primary">{{ c.type_musique }}</span></td>
+                <td>
+                    <a href="{{ url_for('main.modifier_concert', id=c.id) }}" class="btn btn-sm btn-outline-info">Modifier</a>
+                    <a href="{{ url_for('main.supprimer_concert', id=c.id) }}" 
+                       class="btn btn-sm btn-outline-danger" 
+                       onclick="return confirm('Supprimer ce concert ?')">Supprimer</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Aucun concert prévu.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary mt-3">Retour</a>
+{% endblock %}

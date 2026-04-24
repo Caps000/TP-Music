@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSIACTU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .brand-title { color: #b0d4b8; font-weight: bold; font-size: 2.5rem; }
+        .nav-link-custom { color: #212529; text-decoration: none; margin: 0 10px; font-weight: 500; }
+        .nav-link-custom:hover { color: #198754; }
+        header { background-color: #fff; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <header class="container mt-4 mb-4 border border-secondary rounded p-3 shadow-sm">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <a href="{{ url_for('main.accueil') }}" class="text-decoration-none">
+                    <h1 class="brand-title m-0">MUSIACTU</h1>
+                </a>
+            </div>
+            
+            <div class="col-md-6 text-center">
+                <nav>
+                    <a href="{{ url_for('main.concerts') }}" class="nav-link-custom">Concerts</a> |
+                    <a href="{{ url_for('main.actualites') }}" class="nav-link-custom">Actualités</a> |
+                    <a href="{{ url_for('main.filtrer_genre', nom='Jazz') }}" class="nav-link-custom">Jazz</a> |
+                    <a href="{{ url_for('main.filtrer_genre', nom='Rock') }}" class="nav-link-custom">Rock</a> |
+                    <a href="{{ url_for('main.filtrer_genre', nom='Rap') }}" class="nav-link-custom">Rap</a>
+                </nav>
+            </div>
+            
+            <div class="col-md-3 text-center text-md-end">
+                {% if session.get('utilisateur_id') %}
+                    <span class="small text-muted me-2">Salut, <strong>{{ session.get('utilisateur_nom') }}</strong></span>
+                    {% if session.get('est_admin') %}
+                        <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-sm btn-warning me-1 fw-bold">Admin</a>
+                    {% endif %}
+                    <a href="{{ url_for('main.deconnexion') }}" class="btn btn-sm btn-outline-danger">Quitter</a>
+                {% else %}
+                    <a href="{{ url_for('main.connexion') }}" class="btn btn-sm btn-outline-dark me-2">Connexion</a>
+                    <a href="{{ url_for('main.inscription') }}" class="btn btn-sm btn-success">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="container bg-white border border-secondary rounded p-4 mb-5 shadow-sm" style="min-height: 70vh;">
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+        
+    </main>
+
+    <footer class="text-center text-muted py-4 small">
+        <hr class="container mb-4">
+        © 2026 Musiactu - TP Technologies Web
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if actualites %}
+    {% set une = actualites[0] %}
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-light border border-secondary shadow-sm">
+        <div class="col-lg-8 px-0">
+            <span class="badge bg-success mb-2 px-3 py-2">{{ une.categorie.nom }}</span>
+            <h1 class="display-4 fw-bold">{{ une.titre }}</h1>
+            <p class="lead my-3">{{ une.contenu[:250] }}...</p>
+            <a href="{{ url_for('main.actualites') }}" class="text-success fw-bold text-decoration-none">Lire la suite...</a>
+        </div>
+    </div>
+{% endif %}
+
+<div class="row g-5">
+    <div class="col-md-8">
+        <h3 class="pb-4 mb-4 fst-italic border-bottom">Prochainement sur scène</h3>
+        <div class="row">
+            {% for c in concerts %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-secondary shadow-sm">
+                    <div class="card-body">
+                        <small class="text-primary fw-bold">{{ c.type_musique }}</small>
+                        <h5 class="card-title fw-bold mt-1">{{ c.nom }}</h5>
+                        <p class="card-text small text-muted">{{ c.lieu }} | {{ c.date_concert.strftime('%d/%m/%Y') }}</p>
+                        <a href="{{ url_for('main.detail_concert', id=c.id) }}" class="btn btn-sm btn-success">Réserver</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="p-4 mb-3 bg-light rounded border border-secondary">
+            <h4 class="fw-bold">À propos</h4>
+            <p class="small mb-0">Bienvenue sur Musiactu, votre source numéro 1 pour les concerts de la région.</p>
+        </div>
+        <h4 class="fw-bold">Dernières News</h4>
+        <ul class="list-unstyled">
+            {% for actu in actualites[1:] %}
+            <li class="mb-3 pb-2 border-bottom">
+                <span class="badge bg-secondary mb-1">{{ actu.categorie.nom }}</span>
+                <h6 class="mb-0 fw-bold">{{ actu.titre }}</h6>
+                <small class="text-muted">{{ actu.date_creation.strftime('%d %b') }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% if actualites %}
+<section class="mt-5 border-top pt-4">
+    <h4 class="fw-bold mb-4">Commentaires sur la "Une"</h4>
+    {% for comm in actualites[0].commentaires %}
+        <div class="bg-light p-2 rounded mb-2 border-start border-success border-4 shadow-sm">
+            <strong>{{ comm.nom_auteur }}</strong> : <small>{{ comm.contenu }}</small>
+        </div>
+    {% endfor %}
+    {% if session.get('utilisateur_id') %}
+        <form action="{{ url_for('main.poster_commentaire', type_objet='actualite', id_objet=actualites[0].id) }}" method="POST" class="d-flex gap-2 mt-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="text" name="contenu" class="form-control" placeholder="Votre commentaire..." required>
+            <button type="submit" class="btn btn-success">Publier</button>
+        </form>
+    {% else %}
+        <p class="small text-muted mt-3">Connectez-vous pour commenter.</p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}

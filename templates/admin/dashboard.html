@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold">Tableau de bord Administration</h2>
+    <p class="text-muted">Bienvenue dans l'espace de gestion de Musiactu.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">Catégories</h5>
+                <p class="card-text">Gérer les genres musicaux (Jazz, Rock, etc.).</p>
+                <a href="{{ url_for('main.admin_categories') }}" class="btn btn-light fw-bold">Gérer</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-success text-white mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">Actualités</h5>
+                <p class="card-text">Publier, modifier ou supprimer des articles.</p>
+                <a href="{{ url_for('main.admin_actualites') }}" class="btn btn-light fw-bold">Gérer</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-info text-white mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">Concerts</h5>
+                <p class="card-text">Organiser les dates et gérer les réservations.</p>
+                <a href="{{ url_for('main.admin_concerts') }}" class="btn btn-light fw-bold">Gérer</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ url_for('main.accueil') }}" class="btn btn-secondary">Retour au site public</a>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <div class="card border-secondary shadow-sm">
+            <div class="card-body">
+                <h2 class="fw-bold text-success">{{ concert.nom }}</h2>
+                <p><strong>Lieu :</strong> {{ concert.lieu }}</p>
+                <p><strong>Prix unitaire :</strong> <span id="prix_unitaire">{{ concert.prix }}</span> €</p>
+                <hr>
+                <p class="text-muted small">Catégorie : {{ concert.type_musique }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        {% if concert.date_concert >= maintenant %}
+            <div class="card border-success shadow-sm">
+                <div class="card-header bg-success text-white"><h5>Réserver</h5></div>
+                <div class="card-body">
+                    <p>Places restantes : <strong>{{ places_restantes }}</strong></p>
+                    
+                    {% if session.get('utilisateur_id') %}
+                        <form method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nombre de billets</label>
+                                <input type="number" id="nb_places" name="nb_places" class="form-control" value="1" min="1" max="{{ places_restantes }}" oninput="calculerTotal()">
+                            </div>
+                            
+                            <div class="p-3 bg-light rounded mb-3">
+                                <h5 class="mb-0">Total : <span id="total_price" class="text-success fw-bold">{{ concert.prix }}</span> €</h5>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Confirmer la commande</button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('main.connexion') }}" class="btn btn-outline-success w-100">Se connecter pour réserver</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function calculerTotal() {
+    const prixUnitaire = parseFloat(document.getElementById('prix_unitaire').innerText);
+    const quantite = parseInt(document.getElementById('nb_places').value);
+    const total = prixUnitaire * quantite;
+    
+    if (!isNaN(total)) {
+        document.getElementById('total_price').innerText = total.toFixed(2);
+    }
+}
+</script>
+{% endblock %}

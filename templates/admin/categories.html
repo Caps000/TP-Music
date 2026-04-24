@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Catégories</h2>
+    <a href="{{ url_for('main.ajouter_categorie') }}" class="btn btn-success">Ajouter une catégorie</a>
+</div>
+
+<table class="table table-striped border">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th style="width: 200px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in categories %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.nom }}</td>
+            <td>
+                <a href="{{ url_for('main.modifier_categorie', id=c.id) }}" class="btn btn-sm btn-info text-white">Modifier</a>
+                
+                <a href="{{ url_for('main.supprimer_categorie', id=c.id) }}" 
+                   class="btn btn-sm btn-danger" 
+                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">
+                   Supprimer
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" class="text-center text-muted">Aucune catégorie trouvée.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">Retour au Dashboard</a>
+{% endblock %}

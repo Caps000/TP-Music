@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-4">
+    <h2 class="fw-bold text-success">Toutes les Actualités</h2>
+    <p class="text-muted">Retrouvez ici l'intégralité des news du monde de la musique.</p>
+</div>
+
+<div class="row">
+    {% for actu in actualites %}
+    <div class="col-12 mb-4">
+        <div class="card shadow-sm border-secondary">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-primary px-3 py-2 text-uppercase">{{ actu.categorie.nom }}</span>
+                    <small class="text-muted">Publié le {{ actu.date_creation.strftime('%d/%m/%Y') }}</small>
+                </div>
+                
+                <h3 class="card-title fw-bold mt-2">{{ actu.titre }}</h3>
+                
+                <p class="card-text text-dark">
+                    {{ actu.contenu[:300] }}{% if actu.contenu|length > 300 %}...{% endif %}
+                </p>
+                
+                <div class="text-end">
+                    <a href="{{ url_for('main.detail_actualite', id=actu.id) }}" class="btn btn-outline-success btn-sm px-4">
+                        Lire l'article complet
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="alert alert-info border-info bg-light">
+            <h5 class="mb-0">Aucun article n'a été publié pour le moment.</h5>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

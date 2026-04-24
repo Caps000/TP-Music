@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-success fw-bold mb-4">Univers : {{ genre }}</h2>
+<div class="row">
+    <div class="col-md-8">
+        <h5>Dernières news {{ genre }}</h5>
+        {% for a in actualites %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h6>{{ a.titre }}</h6>
+                    <a href="{{ url_for('main.detail_actualite', id=a.id) }}" class="btn btn-sm btn-link text-success p-0">Lire</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-4">
+        <h5>Concerts {{ genre }}</h5>
+        {% for c in concerts %}
+            <div class="card mb-2 border-primary">
+                <div class="card-body p-2">
+                    <small class="fw-bold">{{ c.nom }}</small><br>
+                    <a href="{{ url_for('main.detail_concert', id=c.id) }}" class="btn btn-sm btn-primary py-0">Détails</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

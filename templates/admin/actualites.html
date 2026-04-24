@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Actualités</h2>
+    <a href="{{ url_for('main.ajouter_actualite') }}" class="btn btn-success">Publier une news</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>Date</th>
+                <th>Titre</th>
+                <th>Catégorie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for actu in actualites %}
+            <tr>
+                <td>{{ actu.date_creation.strftime('%d/%m/%Y') }}</td>
+                <td>{{ actu.titre }}</td>
+                <td><span class="badge bg-secondary">{{ actu.categorie.nom }}</span></td>
+                <td>
+                    <a href="{{ url_for('main.modifier_actualite', id=actu.id) }}" class="btn btn-sm btn-info">Modifier</a>
+                    <a href="{{ url_for('main.supprimer_actualite', id=actu.id) }}" 
+                       class="btn btn-sm btn-danger" 
+                       onclick="return confirm('Supprimer cet article ?')">Supprimer</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="text-center text-muted">Aucune actualité publiée pour le moment.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary mt-3">Retour au Dashboard</a>
+{% endblock %}

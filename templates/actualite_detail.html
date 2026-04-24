@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <span class="badge bg-primary mb-2">{{ actu.categorie.nom }}</span>
+        <h1 class="fw-bold">{{ actu.titre }}</h1>
+        <p class="text-muted">Le {{ actu.date_creation.strftime('%d/%m/%Y') }}</p>
+        <div class="my-4 lead" style="white-space: pre-wrap;">{{ actu.contenu }}</div>
+        <hr>
+        <h4>Commentaires ({{ actu.commentaires|length }})</h4>
+        {% for c in actu.commentaires %}
+            <div class="bg-light p-2 rounded mb-2 border-start border-success border-4 shadow-sm">
+                <strong>{{ c.nom_auteur }}</strong> : {{ c.contenu }}
+            </div>
+        {% endfor %}
+        {% if session.get('utilisateur_id') %}
+            <form action="{{ url_for('main.poster_commentaire', type_objet='actualite', id_objet=actu.id) }}" method="POST" class="mt-3">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <textarea name="contenu" class="form-control mb-2" placeholder="Votre avis..." required></textarea>
+                <button type="submit" class="btn btn-success">Publier</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

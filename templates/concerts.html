@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-5">
+    <h2 class="fw-bold text-success mb-4">Trouver un concert</h2>
+    
+    <form method="GET" action="{{ url_for('main.concerts') }}" class="row g-3 p-4 bg-light border rounded shadow-sm">
+        <div class="col-md-3">
+            <label class="form-label small fw-bold">Genre musical</label>
+            <input type="text" name="genre" class="form-control" placeholder="ex: Rap, Rock..." value="{{ f_genre }}">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label small fw-bold">Ville / Lieu</label>
+            <input type="text" name="lieu" class="form-control" placeholder="ex: Paris, Lyon..." value="{{ f_lieu }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small fw-bold">Date</label>
+            <input type="date" name="date" class="form-control" value="{{ f_date }}">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label small fw-bold">Prix max (€)</label>
+            <input type="number" name="prix_max" class="form-control" placeholder="ex: 50" value="{{ f_prix_max }}">
+        </div>
+        <div class="col-md-2 d-flex align-items-end gap-1">
+            <button type="submit" class="btn btn-success w-100">Filtrer</button>
+            <a href="{{ url_for('main.concerts') }}" class="btn btn-outline-secondary">X</a>
+        </div>
+    </form>
+</div>
+
+<h3 class="fw-bold mb-4">Prochainement sur scène</h3>
+<div class="row">
+    {% for c in concerts %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 border-success shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge bg-primary text-uppercase">{{ c.type_musique }}</span>
+                    <h5 class="text-success fw-bold">{{ c.prix }} €</h5>
+                </div>
+                <h4 class="card-title fw-bold">{{ c.nom }}</h4>
+                <p class="mb-3">
+                    <strong>{{ c.date_concert.strftime('%d/%m/%Y') }}</strong> à {{ c.date_concert.strftime('%H:%M') }}<br>
+                    <span class="text-muted">{{ c.lieu }}</span>
+                </p>
+                <a href="{{ url_for('main.detail_concert', id=c.id) }}" class="btn btn-success w-100">Réserver</a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-4">
+        <p class="text-muted">Aucun concert ne correspond à vos critères.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<hr class="my-5">
+
+<h3 class="fw-bold text-muted mb-4">Archives (Concerts passés)</h3>
+<div class="row">
+    {% for c in concerts_passes %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-secondary bg-light opacity-75">
+            <div class="card-body">
+                <h6 class="fw-bold mb-1">{{ c.nom }}</h6>
+                <small class="d-block mb-2">{{ c.date_concert.strftime('%d/%m/%Y') }} - {{ c.lieu }}</small>
+                <a href="{{ url_for('main.detail_concert', id=c.id) }}" class="btn btn-sm btn-outline-secondary py-0">Voir l'avis</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
